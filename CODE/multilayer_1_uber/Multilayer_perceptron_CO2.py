@@ -10,14 +10,20 @@ import os.path
 import json
 from keras.models import model_from_json
 
+
+#for tensorboard
+from time import time
+from tensorflow.python.keras.callbacks import TensorBoard
+
 # For reproducibility - splitting train and test sets
 seed = 123
 np.random.seed(seed)
 
 
+
 # Load data from Excel sheets
-dataset2 = pd.read_excel('Uberset_02.xlsx')
-dataset1 = pd.read_excel('Uberset_01.xlsx')
+dataset2 = pd.read_excel(r'D:\PS!\Dataset\UBER\Uberset_02.xlsx')
+dataset1 = pd.read_excel(r'D:\PS!\Dataset\UBER\Uberset_01.xlsx')
 
 #Combine datasets into one single data file
 frames=[dataset1,dataset2]
@@ -57,13 +63,17 @@ model = Sequential()
 model.add(Dense(12, input_dim=6, activation='relu'))
 model.add(Dense(3, activation='softmax'))
 
+
+#log directory to save tensorboard outputs
+tensorboard=TensorBoard(log_dir="log/{}".format(time()))
+
 # Compile model
 model.compile(Adam(lr=0.01),'categorical_crossentropy',metrics=['accuracy'])
 
 
 
 
-if os.path.isfile('multilayer_perceptron_weights_CO2.h5'):
+if os.path.isfile('#multilayer_perceptron_weights_CO2.h5'):
 
     # Model reconstruction from JSON file
     json_file = open('model_architecture.json', 'r')
@@ -80,7 +90,7 @@ else:
     print("Model weights data not found. Model will be fit on training set now.")
 
     # Fit model on training data - try to replicate the normal input
-    model.fit(X_train,y_train,epochs=50,batch_size=256,verbose=1,validation_data=(X_test,y_test))
+    model.fit(X_train,y_train,epochs=10,batch_size=256,verbose=1,validation_data=(X_test,y_test),callbacks=[tensorboard])
     
     # Save parameters to JSON file
     model_json = model.to_json()
