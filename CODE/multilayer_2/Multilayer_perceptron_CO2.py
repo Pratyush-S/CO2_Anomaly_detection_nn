@@ -12,6 +12,9 @@ import os.path
 import json
 from keras.models import model_from_json
 
+#for tensorboard
+from time import time
+from tensorflow.python.keras.callbacks import TensorBoard
 
 # For reproducibility - splitting train and test sets
 seed = 127
@@ -68,6 +71,9 @@ model = Sequential()
 model.add(Dense(12, input_dim=7, activation='relu'))
 model.add(Dense(12, activation='relu'))
 model.add(Dense(2, activation='softmax'))
+
+#log directory to save tensorboard outputs
+
 
 # Compile model
 model.compile(Adam(lr=0.01),'categorical_crossentropy',metrics=['accuracy'])
