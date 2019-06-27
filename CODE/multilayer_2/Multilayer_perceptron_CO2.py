@@ -20,14 +20,14 @@ np.random.seed(seed)
 
 # Load data from Excel sheets
 #dataset2 = pd.read_excel('Uberset_02.xlsx')
-dataset1 = pd.read_excel(r'D:\PS\CODE\multilayer_2\Simulink_Data_25.xlsx')
-dataset2 = pd.read_excel(r'D:\PS\CODE\multilayer_2\Simulink_Data_50.xlsx')
-dataset3 = pd.read_excel(r'D:\PS\CODE\multilayer_2\Simulink_Data_75.xlsx')
-dataset4 = pd.read_excel(r'D:\PS\CODE\multilayer_2\Simulink_Data_100.xlsx')
-dataset5 = pd.read_excel(r'D:\PS\CODE\multilayer_2\Simulink_Data_25_1.xlsx')
-dataset6 = pd.read_excel(r'D:\PS\CODE\multilayer_2\Simulink_Data_50_1.xlsx')
-dataset7 = pd.read_excel(r'D:\PS\CODE\multilayer_2\Simulink_Data_75_1.xlsx')
-dataset8 = pd.read_excel(r'D:\PS\CODE\multilayer_2\Simulink_Data_100_1.xlsx')
+dataset1 = pd.read_excel(r'D:\PS!\Dataset\Sim\Simulink_Data_25.xlsx')
+dataset2 = pd.read_excel(r'D:\PS!\Dataset\Sim\Simulink_Data_50.xlsx')
+dataset3 = pd.read_excel(r'D:\PS!\Dataset\Sim\Simulink_Data_75.xlsx')
+dataset4 = pd.read_excel(r'D:\PS!\Dataset\Sim\Simulink_Data_100.xlsx')
+dataset5 = pd.read_excel(r'D:\PS!\Dataset\Sim\Simulink_Data_25_1.xlsx')
+dataset6 = pd.read_excel(r'D:\PS!\Dataset\Sim\Simulink_Data_50_1.xlsx')
+dataset7 = pd.read_excel(r'D:\PS!\Dataset\Sim\Simulink_Data_75_1.xlsx')
+dataset8 = pd.read_excel(r'D:\PS!\Dataset\Sim\Simulink_Data_100_1.xlsx')
 
 #Combine datasets into one single data file
 frames=[dataset1, dataset2, dataset3, dataset4, dataset5, dataset6, dataset7, dataset8]
@@ -66,6 +66,7 @@ X_train, X_test, y_train, y_test = train_test_split(X_complete, y_complete, test
 # Define Neural Network model layers
 model = Sequential()
 model.add(Dense(12, input_dim=7, activation='relu'))
+model.add(Dense(12, activation='relu'))
 model.add(Dense(2, activation='softmax'))
 
 # Compile model
@@ -91,7 +92,7 @@ else:
     print("Model weights data not found. Model will be fit on training set now.")
 
     # Fit model on training data - try to replicate the normal input
-    model.fit(X_train,y_train,epochs=50,batch_size=256,verbose=1,validation_data=(X_test,y_test))
+    model.fit(X_train,y_train,epochs=10,batch_size=256,verbose=1,validation_data=(X_test,y_test))
     
     # Save parameters to JSON file
     model_json = model.to_json()
