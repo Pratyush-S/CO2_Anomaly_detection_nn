@@ -25,7 +25,7 @@ np.random.seed(seed)
 
 # Load data from Excel sheets
 #dataset2 = pd.read_excel('Uberset_02.xlsx')
-dataset1 = pd.read_excel(r'D:\PS!\Dataset\Sim\Simulink_Data_25.xlsx')
+
 dataset2 = pd.read_excel(r'D:\PS!\Dataset\Sim\Simulink_Data_50.xlsx')
 dataset3 = pd.read_excel(r'D:\PS!\Dataset\Sim\Simulink_Data_75.xlsx')
 dataset4 = pd.read_excel(r'D:\PS!\Dataset\Sim\Simulink_Data_100.xlsx')
@@ -65,17 +65,19 @@ X_complete=X_complete.values
 y_complete = pd.get_dummies(y_complete).values
 
 # Creating a Train and a Test Dataset
-X_train, X_test, y_train, y_test = train_test_split(X_complete, y_complete, test_size=0.3, random_state=seed)
+X_train, X_test, y_train, y_test = train_test_split(X_complete, y_complete, test_size=0.001, random_state=seed)
 
 
 # Define Neural Network model layers
 model = Sequential()
 model.add(Dense(12, input_dim=7, activation='relu'))
+#model.add(Dense(12, activation='relu'))
+#model.add(Dense(12, activation='relu'))
 model.add(Dense(12, activation='relu'))
 model.add(Dense(2, activation='softmax'))
 
 #log directory to save tensorboard outputs
-tensorboard=TensorBoard(log_dir="log/{}".format(time()))
+tensorboard=TensorBoard(log_dir="log1/{}".format(time()))
 
 # Compile model
 model.compile(Adam(lr=0.01),'categorical_crossentropy',metrics=['accuracy'])
@@ -100,7 +102,7 @@ else:
     print("Model weights data not found. Model will be fit on training set now.")
 
     # Fit model on training data - try to replicate the normal input
-    model.fit(X_train,y_train,epochs=10,batch_size=256,verbose=1,validation_data=(X_test,y_test),callbacks=[tensorboard])
+    model.fit(X_train,y_train,epochs=40,batch_size=256,verbose=1,validation_data=(X_test,y_test),callbacks=[tensorboard])
     
     # Save parameters to JSON file
     model_json = model.to_json()
