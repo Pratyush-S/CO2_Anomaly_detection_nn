@@ -1,3 +1,5 @@
+#RUN tensorboard --logdir log in terminal to start tensorboard
+
 import tensorflow as tf
 
 import pandas as pd
@@ -73,7 +75,7 @@ model.add(Dense(12, activation='relu'))
 model.add(Dense(2, activation='softmax'))
 
 #log directory to save tensorboard outputs
-
+tensorboard=TensorBoard(log_dir="log/{}".format(time()))
 
 # Compile model
 model.compile(Adam(lr=0.01),'categorical_crossentropy',metrics=['accuracy'])
@@ -98,7 +100,7 @@ else:
     print("Model weights data not found. Model will be fit on training set now.")
 
     # Fit model on training data - try to replicate the normal input
-    model.fit(X_train,y_train,epochs=10,batch_size=256,verbose=1,validation_data=(X_test,y_test))
+    model.fit(X_train,y_train,epochs=10,batch_size=256,verbose=1,validation_data=(X_test,y_test),callbacks=[tensorboard])
     
     # Save parameters to JSON file
     model_json = model.to_json()
