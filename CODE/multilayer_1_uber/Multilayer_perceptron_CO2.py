@@ -55,7 +55,7 @@ X_complete=X_complete.values
 y_complete = pd.get_dummies(y_complete).values
 
 # Creating a Train and a Test Dataset
-X_train, X_test, y_train, y_test = train_test_split(X_complete, y_complete, test_size=0.3, random_state=seed)
+X_train, X_test, y_train, y_test = train_test_split(X_complete, y_complete, test_size=0.9, random_state=seed)
 
 
 # Define Neural Network model layers
@@ -90,7 +90,7 @@ else:
     print("Model weights data not found. Model will be fit on training set now.")
 
     # Fit model on training data - try to replicate the normal input
-    model.fit(X_train,y_train,epochs=10,batch_size=256,verbose=1,validation_data=(X_test,y_test),callbacks=[tensorboard])
+    model.fit(X_train,y_train,epochs=30,batch_size=256,verbose=1,validation_data=(X_test,y_test),callbacks=[tensorboard])
     
     # Save parameters to JSON file
     model_json = model.to_json()
