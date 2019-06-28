@@ -60,13 +60,13 @@ X_complete=X_complete.values
 y_complete = pd.get_dummies(y_complete).values
 
 # Creating a Train and a Test Dataset
-X_train, X_test, y_train, y_test = train_test_split(X_complete, y_complete, test_size=0.3, random_state=seed)
+X_train, X_test, y_train, y_test = train_test_split(X_complete, y_complete, test_size=0.95, random_state=seed)
 
 
 # Define Neural Network model layers
 model = Sequential()
-model.add(Dense(12, input_dim=7, activation='relu'))
-model.add(Dense(12, activation='relu'))
+model.add(Dense(12, input_dim=7, activation='softmax'))
+model.add(Dense(12, activation='softmax'))
 model.add(Dense(2, activation='softmax'))
 
 # Compile model
@@ -75,7 +75,7 @@ model.compile(Adam(lr=0.01),'categorical_crossentropy',metrics=['accuracy'])
 
 
 
-if os.path.isfile('#mlp_weights_CO2.h5'):
+if os.path.isfile('mlp_weights_CO2.h5'):
 
     # Model reconstruction from JSON file
     json_file = open('mlp_arch_2019.json', 'r')
