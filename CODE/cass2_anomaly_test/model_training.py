@@ -40,7 +40,9 @@ dataset = dataset.sample(frac=1).reset_index(drop=True)
 
 
 X_complete=dataset.drop(['Class','zone_1','zone_2','zone_3','zone_4','zone_5','zone_6','flightNo','tailNo'],axis=1)
-y_complete=dataset[['Class','zone_1','zone_2','zone_3','zone_4','zone_5','zone_6']]
+
+#y_complete=dataset[['Class','zone_1','zone_2','zone_3','zone_4','zone_5','zone_6']]
+y_complete=dataset['Class']
 
 print("Unnormalized Data", "\n", X_complete[:5], "\n")
 print("Unnormalized Data", "\n", y_complete[:5], "\n")
@@ -69,8 +71,9 @@ X_train, X_test, y_train, y_test = train_test_split(X_complete, y_complete, test
 
 # Define Neural Network model layers
 model = Sequential()
-model.add(Dense(12, input_dim=7, activation='softmax'))
-model.add(Dense(12, activation='softmax'))
+model.add(Dense(5, input_dim=6, activation='softmax'))
+model.add(Dense(5, activation='softmax'))
+model.add(Dense(5, activation='softmax'))
 model.add(Dense(2, activation='softmax'))
 
 # Compile model
@@ -96,7 +99,7 @@ else:
     print("Model weights data not found. Model will be fit on training set now.")
 
     # Fit model on training data - try to replicate the normal input
-    model.fit(X_train,y_train,epochs=10,batch_size=256,verbose=1,validation_data=(X_test,y_test))
+    model.fit(X_train,y_train,epochs=100,batch_size=50,verbose=1,validation_data=(X_test,y_test))
     
     # Save parameters to JSON file
     model_json = model.to_json()
