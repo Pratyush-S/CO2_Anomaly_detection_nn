@@ -41,7 +41,7 @@ dataset = dataset.sample(frac=1).reset_index(drop=True)
 
 X_complete=dataset.drop(['Class','zone_1','zone_2','zone_3','zone_4','zone_5','zone_6','flightNo','tailNo'],axis=1)
 
-#y_complete=dataset[['Class','zone_1','zone_2','zone_3','zone_4','zone_5','zone_6']]
+#y_complete=dataset['Class','zone_1']
 y_complete=dataset['Class']
 
 print("Unnormalized Data", "\n", X_complete[:5], "\n")
@@ -71,9 +71,9 @@ X_train, X_test, y_train, y_test = train_test_split(X_complete, y_complete, test
 
 # Define Neural Network model layers
 model = Sequential()
-model.add(Dense(5, input_dim=6, activation='softmax'))
-model.add(Dense(5, activation='softmax'))
-model.add(Dense(5, activation='softmax'))
+model.add(Dense(12, input_dim=6, activation='softmax'))
+model.add(Dense(12, activation='softmax'))
+model.add(Dense(12, activation='softmax'))
 model.add(Dense(2, activation='softmax'))
 
 # Compile model
