@@ -35,12 +35,12 @@ dataset = pd.concat(frames)
 #  Shuffle Data
 #The frac keyword argument specifies the fraction of rows to return in the random sample
 #so frac=1 means return all rows (in random order)
-#
+#https://stackoverflow.com/questions/29576430/shuffle-dataframe-rows
 dataset = dataset.sample(frac=1).reset_index(drop=True)
 
 
-X_complete=dataset.drop('class','zone_1','zone_2','zone_3','zone_4','zone_5','zone_6','flightNo','tailNo',axis=1)
-y_complete=dataset['class']
+X_complete=dataset.drop(['Class','zone_1','zone_2','zone_3','zone_4','zone_5','zone_6','flightNo','tailNo'],axis=1)
+y_complete=dataset[['Class','zone_1','zone_2','zone_3','zone_4','zone_5','zone_6']]
 
 print("Unnormalized Data", "\n", X_complete[:5], "\n")
 print("Unnormalized Data", "\n", y_complete[:5], "\n")
@@ -64,7 +64,7 @@ X_complete=X_complete.values
 y_complete = pd.get_dummies(y_complete).values
 
 # Creating a Train and a Test Dataset
-X_train, X_test, y_train, y_test = train_test_split(X_complete, y_complete, test_size=0.95, random_state=seed)
+X_train, X_test, y_train, y_test = train_test_split(X_complete, y_complete, test_size=0.3, random_state=seed)
 
 
 # Define Neural Network model layers
@@ -79,7 +79,7 @@ model.compile(Adam(lr=0.01),'categorical_crossentropy',metrics=['accuracy'])
 
 
 
-if os.path.isfile('mlp_weights_CO2.h5'):
+if os.path.isfile('#mlp_weights_CO2.h5'):
 
     # Model reconstruction from JSON file
     json_file = open('mlp_arch_2019.json', 'r')
