@@ -20,13 +20,14 @@ np.random.seed(seed)
 
 # Load data from Excel sheets
 #dataset2 = pd.read_excel('Uberset_02.xlsx')
-dataset1 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\cass2_anomaly_test\dataset\25_1\Simulink_Data.xlsx', sheet_name='Sheet2')
-dataset2 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\cass2_anomaly_test\dataset\25_2\Simulink_Data.xlsx', sheet_name='Sheet2')
-dataset3 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\cass2_anomaly_test\dataset\50_1\Simulink_Data.xlsx', sheet_name='Sheet2')
-dataset4 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\cass2_anomaly_test\dataset\50_2\Simulink_Data.xlsx', sheet_name='Sheet2')
-dataset5 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\cass2_anomaly_test\dataset\75_1\Simulink_Data.xlsx', sheet_name='Sheet2')
-dataset6 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\cass2_anomaly_test\dataset\75_2\Simulink_Data.xlsx', sheet_name='Sheet2')
-dataset7 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\cass2_anomaly_test\dataset\100_1\Simulink_Data.xlsx', sheet_name='Sheet2')
+dataset1 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\cass2_anomaly_test\training set\25_1_train.xlsx', sheet_name='Sheet2')
+dataset2 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\cass2_anomaly_test\training set\25_2_train.xlsx', sheet_name='Sheet2')
+dataset3 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\cass2_anomaly_test\training set\50_1_train.xlsx', sheet_name='Sheet2')
+dataset4 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\cass2_anomaly_test\training set\50_2_train.xlsx', sheet_name='Sheet2')
+dataset5 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\cass2_anomaly_test\training set\75_1_train.xlsx', sheet_name='Sheet2')
+dataset6 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\cass2_anomaly_test\training set\75_2_train.xlsx', sheet_name='Sheet2')
+dataset7 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\cass2_anomaly_test\training set\100_1_train.xlsx', sheet_name='Sheet2')
+dataset8 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\cass2_anomaly_test\training set\100_2_train.xlsx', sheet_name='Sheet2')
 
 #Combine datasets into one single data file
 frames=[dataset1, dataset2, dataset3, dataset4, dataset5, dataset6, dataset7]
@@ -71,9 +72,8 @@ X_train, X_test, y_train, y_test = train_test_split(X_complete, y_complete, test
 
 # Define Neural Network model layers
 model = Sequential()
-model.add(Dense(12, input_dim=6, activation='softmax'))
-model.add(Dense(12, activation='softmax'))
-model.add(Dense(12, activation='softmax'))
+model.add(Dense(14, input_dim=7, activation='softmax'))
+model.add(Dense(14, activation='softmax'))
 model.add(Dense(2, activation='softmax'))
 
 # Compile model
@@ -99,7 +99,7 @@ else:
     print("Model weights data not found. Model will be fit on training set now.")
 
     # Fit model on training data - try to replicate the normal input
-    model.fit(X_train,y_train,epochs=100,batch_size=50,verbose=1,validation_data=(X_test,y_test))
+    model.fit(X_train,y_train,epochs=400,batch_size=50,verbose=1,validation_data=(X_test,y_test))
     
     # Save parameters to JSON file
     model_json = model.to_json()
