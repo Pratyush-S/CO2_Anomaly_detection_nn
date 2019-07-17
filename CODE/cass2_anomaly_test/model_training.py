@@ -72,8 +72,8 @@ X_train, X_test, y_train, y_test = train_test_split(X_complete, y_complete, test
 
 # Define Neural Network model layers
 model = Sequential()
-model.add(Dense(14, input_dim=7, activation='softmax'))
-model.add(Dense(14, activation='softmax'))
+model.add(Dense(9, input_dim=7, activation='relu'))
+model.add(Dense(3, activation='relu'))
 model.add(Dense(2, activation='softmax'))
 
 # Compile model
@@ -99,7 +99,7 @@ else:
     print("Model weights data not found. Model will be fit on training set now.")
 
     # Fit model on training data - try to replicate the normal input
-    model.fit(X_train,y_train,epochs=400,batch_size=50,verbose=1,validation_data=(X_test,y_test))
+    model.fit(X_train,y_train,epochs=400,batch_size=100,verbose=1,validation_data=(X_test,y_test))
     
     # Save parameters to JSON file
     model_json = model.to_json()
