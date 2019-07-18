@@ -86,9 +86,10 @@ press=a*p_sim(2);
 humid=a*h_sim(3);
 humid(1)=h_sim(2);
 passcnt=a*pas_cnt(2);
+x=zeros(14402,1);
 
-final_array=cat(2,Time,CO2_Zone_1,CO2_Zone_2,CO2_Zone_3,CO2_Zone_4,CO2_Zone_5,CO2_Zone_6,temp,press,humid,passcnt);
+final_array=cat(2,Time,CO2_Zone_1,CO2_Zone_2,CO2_Zone_3,CO2_Zone_4,CO2_Zone_5,CO2_Zone_6,temp,press,humid,passcnt,x,x,x,x);
 
-final_table=array2table(final_array,'VariableNames',{'Time','CO2_Zone_1','CO2_Zone_2','CO2_Zone_3','CO2_Zone_4','CO2_Zone_5','CO2_Zone_6','temp','press','humid','pass'});
+final_table=array2table(final_array,'VariableNames',{'Time','CO2_Zone_1','CO2_Zone_2','CO2_Zone_3','CO2_Zone_4','CO2_Zone_5','CO2_Zone_6','temp','press','humid','pass','class_0','class_1','class_2','class_3'});
 file_name=strcat('dataset_4hr_pascnt_',num2str(passcnt(4)),'.xlsx');
 writetable(final_table,file_name);
