@@ -22,12 +22,12 @@ def loadmodel():
     global model
     
     # Model reconstruction from JSON file
-    json_file = open('mlp_arch_2019_a.json', 'r')
+    json_file = open('mlp_arch_2019_c.json', 'r')
     loaded_model_json = json_file.read()
     
     json_file.close()
     model = model_from_json(loaded_model_json)
-    model.load_weights('mlp_weights_CO2_a.h5')
+    model.load_weights('mlp_weights_CO2_c.h5')
     model.compile(Adam(lr=0.01),'categorical_crossentropy',metrics=['accuracy'])
 
     print('model loaded')
@@ -95,32 +95,37 @@ def predict(co1,dz1,co2,dz2,co3,dz3,co4,dz4,co5,dz5,co6,dz6,temp,press,humid,pas
     avgco2 = (co1 + co2 + co3 + co4 + co5 + co6)/6
     setpoint = 310 + (9*pas)
                  
-    a=((co1-1429.0864)/1200.3404)               #changed group avd and sd
-    da=((dz1-0.05919)/2.1899)
+    meanz=1457.702637595667
+    sdz=1141.2473423740623
+    meandz=0.0638638733267413
+    sddz=2.142768311895675
     
-    b=((co2-1427.9556)/1195.3391)
-    db=((dz2-0.05919)/2.1519)
+    a=((co1-meanz)/sdz)               #changed group avd and sd
+    da=((dz1-meandz)/sddz)
     
-    
-    c=((co3-1428.4016)/1198.6366)
-    dc=((dz3-0.05919)/2.1621)
-    
-    
-    d=((co4-1428.4000)/1196.2201)
-    dd=((dz4-0.05921)/2.16417)
+    b=((co2-meanz)/sdz)
+    db=((dz2-meandz)/sddz)
     
     
-    e=((co5-1427.2792)/1193.7958)
-    de=((dz5-0.0592)/2.1387)
+    c=((co3-meanz)/sdz)
+    dc=((dz3-meandz)/sddz)
     
     
-    f=((co6-1428.5712)/1196.6787)
-    df=((dz6-0.0592)/2.1555)
+    d=((co4-meanz)/sdz)
+    dd=((dz4-meandz)/sddz)
+    
+    
+    e=((co5-meanz)/sdz)
+    de=((dz5-meandz)/sddz)
+    
+    
+    f=((co6-meanz)/sdz)
+    df=((dz6-meandz)/sddz)
    
     g=((temp-21.9998)/0.00125)
     h=((press-80.000021)/0.000227)
     i=((humid-0.07916)/0.0636)
-    j=((pas-79.2352)/61.2388)                                                
+    j=((pas-91.0533)/61.2388)                                                
     
     
     V_X=pd.DataFrame({'CO2_Zone_1':a,'dz1':da,'CO2_Zone_2':b,'dz2':db,'CO2_Zone_3':c,'dz3':dc,'CO2_Zone_4':d,'dz4':dd,'CO2_Zone_5':e,'dz5':de,'CO2_Zone_6':f,'dz6':df,'temp_f':g,'press_f':h,'humid_f':i,'pass_f':j},index=[0])

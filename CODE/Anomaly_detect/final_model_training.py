@@ -111,10 +111,10 @@ model.compile(Adam(lr=0.01),'categorical_crossentropy',metrics=['accuracy'])
 
 
 
-if os.path.isfile('#mlp_weights_CO2.h5'):
+if os.path.isfile('mlp_weights_CO2_a.h5'):
 
     # Model reconstruction from JSON file
-    json_file = open('mlp_arch_2019.json', 'r')
+    json_file = open('mlp_arch_2019_a.json', 'r')
     loaded_model_json = json_file.read()
     json_file.close()
     model = model_from_json(loaded_model_json)
@@ -132,11 +132,11 @@ else:
     
     # Save parameters to JSON file
     model_json = model.to_json()
-    with open("mlp_arch_2019.json", "w") as json_file:
+    with open("mlp_arch_2019_c.json", "w") as json_file:
         json_file.write(model_json)
 
     # Save model weights to file
-    model.save_weights('mlp_weights_CO2.h5')
+    model.save_weights('mlp_weights_CO2_c.h5')
 
 
 model.summary()
