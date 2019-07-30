@@ -1,0 +1,5 @@
+1. data set folder has all the raw data
+2. training dataset has all 4 classes but only the excel files starting with    training words are used during model trainig
+3. final_model_training is the training script
+4. Scripts contains all the programs used for labeling
+5.  nnco2 is the script for communication and prediction using the model 
