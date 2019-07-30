@@ -95,14 +95,15 @@ X_complete=X_complete.values
 y_complete=y_complete.values
 
 # Creating a Train and a Test Dataset
-X_train, X_test, y_train, y_test = train_test_split(X_complete, y_complete, test_size=0.4, random_state=seed)
+X_train, X_test, y_train, y_test = train_test_split(X_complete, y_complete, test_size=0.2, random_state=seed)
 
 
 # Define Neural Network model layers
 model = Sequential()
 model.add(Dense(20, input_dim=16, activation='softmax'))
-model.add(Dense(15, activation='softmax'))
-model.add(Dense(15, activation='softmax'))
+model.add(Dense(12, activation='softmax'))
+model.add(Dense(12, activation='softmax'))
+model.add(Dense(12, activation='softmax'))
 model.add(Dense(5, activation='softmax'))
 
 # Compile model
@@ -111,16 +112,16 @@ model.compile(Adam(lr=0.01),'categorical_crossentropy',metrics=['accuracy'])
 
 
 
-if os.path.isfile('mlp_weights_CO2_a.h5'):
+if os.path.isfile('#mlp_weights_CO2_c.h5'):
 
     # Model reconstruction from JSON file
-    json_file = open('mlp_arch_2019_a.json', 'r')
+    json_file = open('mlp_arch_2019_c.json', 'r')
     loaded_model_json = json_file.read()
     json_file.close()
     model = model_from_json(loaded_model_json)
     
     # Load weights into the new model
-    model.load_weights('mlp_weights_CO2.h5')
+    model.load_weights('mlp_weights_CO2_c.h5')
     print("Model weights loaded from saved model data.")
 
     model.compile(Adam(lr=0.001),'categorical_crossentropy',metrics=['accuracy'])
