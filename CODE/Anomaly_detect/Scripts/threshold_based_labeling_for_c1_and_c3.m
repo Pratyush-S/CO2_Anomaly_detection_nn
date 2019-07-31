@@ -83,7 +83,7 @@ end
     plot(class_0);
     title("Class 0");
     subplot(5,1,4)
-    plot(class_1);
+    plot(class_3);
     title("class 1");
     subplot(5,1,5)
     plot(class_4);
