@@ -52,7 +52,10 @@ dataset = pd.concat(frames)
 #https://stackoverflow.com/questions/29576430/shuffle-dataframe-rows
 dataset = dataset.sample(frac=1).reset_index(drop=True)
 
+#dataseta = dataset1.sample(frac=1).reset_index(drop=True)
 
+
+#X_complete=dataset.drop(['dz2','dz3','dz4','dz5','dz6','class_0','class_1','class_2','class_3','class_4'],axis=1)
 X_complete=dataset.drop(['class_0','class_1','class_2','class_3','class_4'],axis=1)
 
 #y_complete=dataset['Class','zone_1']
@@ -64,7 +67,9 @@ y1=dataset['class_1']
 y2=dataset['class_2']
 y3=dataset['class_3']
 y4=dataset['class_4']
-X_complete['dz1']=(y4*(-1))+y1+y2+y3
+#X_complete['dz1']=(y4*(-1))+y1+y2+y3
+#X_complete['temp_f']=dataset['dz1']
+
 #y_complete=pd.concat([y0,y1,y2,y3,y4], axis=1, sort=False)
 #y_complete=y1+y2+y0+y3+y4;
 
@@ -100,12 +105,12 @@ X_train, X_test, y_train, y_test = train_test_split(X_complete, y_complete, test
 
 # Define Neural Network model layers
 model = Sequential()
-model.add(Dense(8, input_dim=11, activation='relu'))
-model.add(Dense(8, activation='relu'))
-model.add(Dense(8, activation='relu'))
-model.add(Dense(8, activation='relu'))
-model.add(Dense(8, activation='relu'))
-model.add(Dense(8, activation='relu'))
+model.add(Dense(12, input_dim=16, activation='softmax'))
+#model.add(Dense(10, input_dim=11, activation='softmax'))
+
+model.add(Dense(12, activation='softmax'))
+model.add(Dense(12, activation='softmax'))
+model.add(Dense(8, activation='softmax'))
 model.add(Dense(5, activation='softmax'))
 
 # Compile model
@@ -114,16 +119,16 @@ model.compile(Adam(lr=0.01),'categorical_crossentropy',metrics=['accuracy'])
 
 
 
-if os.path.isfile('#mlp_weights_CO2_b.h5'):
+if os.path.isfile('mlp_weights_CO2_16.h5'):
 
     # Model reconstruction from JSON file
-    json_file = open('mlp_arch_2019_b.json', 'r')
+    json_file = open('mlp_arch_2019_16.json', 'r')
     loaded_model_json = json_file.read()
     json_file.close()
     model = model_from_json(loaded_model_json)
     
     # Load weights into the new model
-    model.load_weights('mlp_weights_CO2_b.h5')
+    model.load_weights('mlp_weights_CO2_16.h5')
     print("Model weights loaded from saved model data.")
 
     model.compile(Adam(lr=0.001),'categorical_crossentropy',metrics=['accuracy'])
@@ -135,11 +140,11 @@ else:
     
     # Save parameters to JSON file
     model_json = model.to_json()
-    with open("mlp_arch_2019_c.json", "w") as json_file:
+    with open("mlp_arch_2019_16.json", "w") as json_file:
         json_file.write(model_json)
 
     # Save model weights to file
-    model.save_weights('mlp_weights_CO2_c.h5')
+    model.save_weights('mlp_weights_CO2_16.h5')
 
 
 model.summary()
@@ -164,6 +169,24 @@ from sklearn.metrics import classification_report,confusion_matrix
 print(classification_report(y_test_class,y_pred_class))
 print(confusion_matrix(y_test_class,y_pred_class))
 
+##########################################################################################
+
+# Model predictions for test set
+y_pred = model.predict(a)
+y_test_class = np.argmax(b,axis=1)
+y_pred_class = np.argmax(y_pred,axis=1)
+
+print(y_test_class,y_pred_class)
+#print(y_pred_class)
+
+
+# Evaluate model on test data
+score = model.evaluate(a,b, batch_size=128,verbose=1)
+ 
+# Compute stats on the test set and Output all results
+from sklearn.metrics import classification_report,confusion_matrix
+print(classification_report(y_test_class,y_pred_class))
+print(confusion_matrix(y_test_class,y_pred_class))
 
     
 #
