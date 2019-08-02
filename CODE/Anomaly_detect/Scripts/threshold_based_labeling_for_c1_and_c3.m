@@ -66,38 +66,47 @@ for i = 1:240
     end
 end
 
+
 for i=1:14400
-    
-    if average_value(i)>=th_140
-     if average_slope(i)<0
-        if humid_f(i)<hm_140
+
+if average_value(i)>=th_140
+    if humid_f(i)<=hm_140
+       if average_slope(i)<=0
         class_4(i)=1;
-        end
-    elseif humid_f(i)>hm_140
-        class_1(i)=1;
-     end
+       end
     else
-        class_0(i)=1;
+           class_1(i)=1;
     end
+    
+else
+    class_0(i)=1;
+    
+
+end
 end
 
+a=class_0+class_1+class_4;
 
-    subplot(5,1,1)
+    subplot(6,1,1)
     plot(average_value);
     title("average value");
-    subplot(5,1,2)
+    subplot(6,1,2)
     plot(average_slope);
     title("Average slope");
-    subplot(5,1,3)
+    subplot(6,1,3)
+    plot(humid_f);
+    title("humid");
+    subplot(6,1,4)
     plot(class_0);
-    title("Class 0");
-    subplot(5,1,4)
+    title("class 0");
+    subplot(6,1,5)
     plot(class_1);
-    title("class 1");
-    subplot(5,1,5)
+    title("class_1");
+    subplot(6,1,6)
     plot(class_4);
     title("class_4");
     
+
     
 %final_array=cat(2,CO2_Zone_1,dz1,CO2_Zone_2,dz2,CO2_Zone_3,dz3,CO2_Zone_4,dz4,CO2_Zone_5,dz5,CO2_Zone_6,dz6,class_0,class_1,class_2,class_3,class_4);
 final_array=cat(2,CO2_Zone_1,dz1,CO2_Zone_2,dz2,CO2_Zone_3,dz3,CO2_Zone_4,dz4,CO2_Zone_5,dz5,CO2_Zone_6,dz6,temp_f,press_f,humid_f,pass_f,class_0,class_1,class_2,class_3,class_4);
@@ -105,7 +114,7 @@ final_array=cat(2,CO2_Zone_1,dz1,CO2_Zone_2,dz2,CO2_Zone_3,dz3,CO2_Zone_4,dz4,CO
 %final_table=array2table(final_array,'VariableNames',{'CO2_Zone_1','dz1','CO2_Zone_2','dz2','CO2_Zone_3','dz3','CO2_Zone_4','dz4','CO2_Zone_5','dz5','CO2_Zone_6','dz6','class_0','class_1','class_2','class_3','class_4'});
 final_table=array2table(final_array,'VariableNames',{'CO2_Zone_1','dz1','CO2_Zone_2','dz2','CO2_Zone_3','dz3','CO2_Zone_4','dz4','CO2_Zone_5','dz5','CO2_Zone_6','dz6','temp_f','press_f','humid_f','pass_f','class_0','class_1','class_2','class_3','class_4'});
 
-file_name=strcat('training_set_4hr_pascnt_140.xlsx');
+file_name=strcat('training_set_4hr_pascnt_186.xlsx');
 %file_name=strcat('training_set_4hr_pascnt_',num2str(20),'.xlsx');
 writetable(final_table,file_name);
 
