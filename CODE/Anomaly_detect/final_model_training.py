@@ -27,6 +27,13 @@ dataset5 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\trai
 
 dataset6 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\training dataset\class1_b\training_set_4hr_pascnt_47.xlsx')
 dataset7 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\training dataset\class1_b\training_set_4hr_pascnt_93.xlsx')
+dataset20 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\training dataset\class1_b\training_set_4hr_pascnt_20.xlsx')
+dataset21 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\training dataset\class1_b\training_set_4hr_pascnt_140.xlsx')
+dataset22= pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\training dataset\class1_b\training_set_4hr_pascnt_160.xlsx')
+dataset23 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\training dataset\class1_b\training_set_4hr_pascnt_70.xlsx')
+dataset24 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\training dataset\class1_b\training_set_4hr_pascnt_120.xlsx')
+
+
 
 dataset8 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\training dataset\class2_b\training_set_4hr_pascnt_0.xlsx')
 dataset9 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\training dataset\class2_b\training_set_4hr_pascnt_93.xlsx')
@@ -43,7 +50,7 @@ dataset18 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\tra
 dataset19 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\training dataset\class3_b\training_set_4hr_pascnt_170.xlsx')
 
 #Combine datasets into one single data file
-frames=[dataset1, dataset2, dataset3, dataset4, dataset5, dataset6, dataset7, dataset8, dataset9, dataset10, dataset11, dataset12, dataset13, dataset14, dataset15, dataset16, dataset17,dataset18,dataset19]
+frames=[dataset1, dataset2, dataset3, dataset4, dataset5, dataset6, dataset7, dataset8, dataset9, dataset10, dataset11, dataset12, dataset13, dataset14, dataset15, dataset16, dataset17,dataset18,dataset19,dataset20,dataset21,dataset22,dataset23,dataset24]
 dataset = pd.concat(frames)
 
 
@@ -113,11 +120,11 @@ X_train, X_test, y_train, y_test = train_test_split(X_complete, y_complete, test
 
 # Define Neural Network model layers
 model = Sequential()
-model.add(Dense(15, input_dim=22, activation='softmax'))
+model.add(Dense(20, input_dim=22, activation='softmax'))
 #model.add(Dense(10, input_dim=11, activation='softmax'))
 
-model.add(Dense(15, activation='softmax'))
-model.add(Dense(15, activation='softmax'))
+model.add(Dense(20, activation='softmax'))
+model.add(Dense(20, activation='softmax'))
 model.add(Dense(15, activation='softmax'))
 model.add(Dense(5, activation='softmax'))
 
@@ -127,7 +134,7 @@ model.compile(Adam(lr=0.01),'categorical_crossentropy',metrics=['accuracy'])
 
 
 
-if os.path.isfile('#mlp_weights_CO2_16.h5'):
+if os.path.isfile('#mlp_weights_final.h5'):
 
     # Model reconstruction from JSON file
     json_file = open('mlp_arch_2019_16.json', 'r')
@@ -148,11 +155,11 @@ else:
     
     # Save parameters to JSON file
     model_json = model.to_json()
-    with open("mlp_arch_2019_16.json", "w") as json_file:
+    with open("mlp_arch_2019_22.json", "w") as json_file:
         json_file.write(model_json)
 
     # Save model weights to file
-    model.save('mlp_weights_CO2_16.h5')
+    model.save('D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\mlp_weights_final.h5')
 
 
 model.summary()

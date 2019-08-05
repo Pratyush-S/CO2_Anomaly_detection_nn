@@ -9,6 +9,7 @@ th_20=490;
 th_70=940;
 th_160=1850;
 th_170=1920;
+th_120=1450;
 
 hm_0=0.0012612;
 hm_47=0.03943;
@@ -20,7 +21,7 @@ hm_70=0.058074;
 hm_163=0.13323;
 hm_160=0.13081;
 hm_170=0.13887;
-
+hm_120=0.098525;
 
 
 class_3=zeros(x,1);
@@ -72,38 +73,37 @@ k=0;
 for i = 1:(x/60)
     for j = 1:60
         k=k+1;
-        temp_f(k)=t_sim(i);
-        press_f(k)=p_sim(i);
+        temp_f(k)=double(string(t_sim(i)));
+        press_f(k)=double(string(p_sim(i)));
         humid_f(k)=h_sim(i);
-        pass_f(k)=pas_cnt(i);
+        pass_f(k)=double(string(pas_cnt(i)));
         
     end
 end
 
 
 for i=1:x
-
-if humid_f(i)>hm_160
-   class_1(i)=1;
-elseif average_value(i)>th_160
-    if average_slope(i)<0
-        class_4(i)=1;
-    end
-else 
-    class_0(i)=1;
-    
-
+ if humid_f(i)>hm_160
+     class_1(i)=1;
+ elseif average_value(i)>th_160
+     if average_slope(i)<=0
+         class_4(i)=1;
+     end
+ else
+     class_0(i)=1;
+ end    
 end
-end
+
 
 a=class_0+class_1+class_4;
+sum(a)
 
     subplot(6,1,1)
     plot(average_value);
     title("average value");
     subplot(6,1,2)
-    plot(average_slope);
-    title("Average slope");
+    plot(a);
+    title("a");
     subplot(6,1,3)
     plot(humid_f);
     title("humid");
@@ -125,7 +125,7 @@ final_array=cat(2,CO2_Zone_1,dz1,CO2_Zone_2,dz2,CO2_Zone_3,dz3,CO2_Zone_4,dz4,CO
 %final_table=array2table(final_array,'VariableNames',{'CO2_Zone_1','dz1','CO2_Zone_2','dz2','CO2_Zone_3','dz3','CO2_Zone_4','dz4','CO2_Zone_5','dz5','CO2_Zone_6','dz6','class_0','class_1','class_2','class_3','class_4'});
 final_table=array2table(final_array,'VariableNames',{'CO2_Zone_1','dz1','CO2_Zone_2','dz2','CO2_Zone_3','dz3','CO2_Zone_4','dz4','CO2_Zone_5','dz5','CO2_Zone_6','dz6','temp_f','press_f','humid_f','pass_f','class_0','class_1','class_2','class_3','class_4'});
 
-file_name=strcat('training_set_4hr_pascnt_160.xlsx');
+file_name=strcat('training_set_4hr_pascnt_test.xlsx');
 %file_name=strcat('training_set_4hr_pascnt_',num2str(20),'.xlsx');
 writetable(final_table,file_name);
 
