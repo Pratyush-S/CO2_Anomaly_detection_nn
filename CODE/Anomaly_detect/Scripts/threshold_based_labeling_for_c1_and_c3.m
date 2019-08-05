@@ -69,8 +69,8 @@ end
 
 for i=1:14400
 
-if average_value(i)>=th_140
-    if humid_f(i)<=hm_140
+if average_value(i)>=th_20
+    if humid_f(i)<=hm_20
        if average_slope(i)<=0
         class_4(i)=1;
        end
@@ -114,7 +114,7 @@ final_array=cat(2,CO2_Zone_1,dz1,CO2_Zone_2,dz2,CO2_Zone_3,dz3,CO2_Zone_4,dz4,CO
 %final_table=array2table(final_array,'VariableNames',{'CO2_Zone_1','dz1','CO2_Zone_2','dz2','CO2_Zone_3','dz3','CO2_Zone_4','dz4','CO2_Zone_5','dz5','CO2_Zone_6','dz6','class_0','class_1','class_2','class_3','class_4'});
 final_table=array2table(final_array,'VariableNames',{'CO2_Zone_1','dz1','CO2_Zone_2','dz2','CO2_Zone_3','dz3','CO2_Zone_4','dz4','CO2_Zone_5','dz5','CO2_Zone_6','dz6','temp_f','press_f','humid_f','pass_f','class_0','class_1','class_2','class_3','class_4'});
 
-file_name=strcat('training_set_4hr_pascnt_186.xlsx');
+file_name=strcat('training_set_4hr_pascnt_20.xlsx');
 %file_name=strcat('training_set_4hr_pascnt_',num2str(20),'.xlsx');
 writetable(final_table,file_name);
 
