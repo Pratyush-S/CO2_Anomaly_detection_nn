@@ -1,5 +1,5 @@
-%x=14400;
-x=7200;
+x=14400;
+%x=7200;
 th_0=310;%%1
 th_47=750;%%
 th_93=1365;%%
@@ -102,7 +102,7 @@ sum(a)
     plot(average_value);
     title("average value");
     subplot(6,1,2)
-    plot(a);
+    plot(dz1);
     title("a");
     subplot(6,1,3)
     plot(humid_f);
@@ -125,7 +125,7 @@ final_array=cat(2,CO2_Zone_1,dz1,CO2_Zone_2,dz2,CO2_Zone_3,dz3,CO2_Zone_4,dz4,CO
 %final_table=array2table(final_array,'VariableNames',{'CO2_Zone_1','dz1','CO2_Zone_2','dz2','CO2_Zone_3','dz3','CO2_Zone_4','dz4','CO2_Zone_5','dz5','CO2_Zone_6','dz6','class_0','class_1','class_2','class_3','class_4'});
 final_table=array2table(final_array,'VariableNames',{'CO2_Zone_1','dz1','CO2_Zone_2','dz2','CO2_Zone_3','dz3','CO2_Zone_4','dz4','CO2_Zone_5','dz5','CO2_Zone_6','dz6','temp_f','press_f','humid_f','pass_f','class_0','class_1','class_2','class_3','class_4'});
 
-file_name=strcat('training_set_4hr_pascnt_test.xlsx');
+file_name=strcat('training_set_4hr_pascnt_c186.xlsx');
 %file_name=strcat('training_set_4hr_pascnt_',num2str(20),'.xlsx');
 writetable(final_table,file_name);
 

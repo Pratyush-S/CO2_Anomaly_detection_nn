@@ -18,7 +18,6 @@ np.random.seed(seed)
 
 
 # Load data from Excel sheets
-#dataset2 = pd.read_excel('Uberset_02.xlsx')
 dataset1 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\training dataset\class0_b\training_set_4hr_pascnt_0.xlsx')
 dataset2 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\training dataset\class0_b\training_set_4hr_pascnt_47.xlsx')
 dataset3 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\training dataset\class0_b\training_set_4hr_pascnt_94.xlsx')
@@ -51,6 +50,8 @@ dataset19 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\tra
 
 #Combine datasets into one single data file
 frames=[dataset1, dataset2, dataset3, dataset4, dataset5, dataset6, dataset7, dataset8, dataset9, dataset10, dataset11, dataset12, dataset13, dataset14, dataset15, dataset16, dataset17,dataset18,dataset19,dataset20,dataset21,dataset22,dataset23,dataset24]
+#frames=[dataset1, dataset2, dataset3, dataset4, dataset5,dataset6, dataset7, dataset20, dataset21, dataset22]
+
 dataset = pd.concat(frames)
 
 
@@ -115,17 +116,17 @@ X_complete=X_complete.values
 y_complete=y_complete.values
 
 # Creating a Train and a Test Dataset
-X_train, X_test, y_train, y_test = train_test_split(X_complete, y_complete, test_size=0.3, random_state=seed)
+X_train, X_test, y_train, y_test = train_test_split(X_complete, y_complete, test_size=0.1, random_state=seed)
 
 
 # Define Neural Network model layers
 model = Sequential()
-model.add(Dense(20, input_dim=22, activation='softmax'))
+model.add(Dense(20, input_dim=22, activation='relu'))
 #model.add(Dense(10, input_dim=11, activation='softmax'))
+model.add(Dense(20, activation='relu'))
+model.add(Dense(20, activation='relu'))
+model.add(Dense(20, activation='relu'))
 
-model.add(Dense(20, activation='softmax'))
-model.add(Dense(20, activation='softmax'))
-model.add(Dense(15, activation='softmax'))
 model.add(Dense(5, activation='softmax'))
 
 # Compile model
@@ -146,12 +147,12 @@ if os.path.isfile('#mlp_weights_final.h5'):
     model.load_weights('mlp_arch_2019_16.h5')
     print("Model weights loaded from saved model data.")
 
-    model.compile(Adam(lr=0.001),'categorical_crossentropy',metrics=['accuracy'])
+    model.compile(Adam(lr=0.0001),'categorical_crossentropy',metrics=['accuracy'])
 else:
     print("Model weights data not found. Model will be fit on training set now.")
 
     # Fit model on training data - try to replicate the normal input
-    model.fit(X_train,y_train,epochs=30,batch_size=200,verbose=1,validation_data=(X_train,y_train))
+    model.fit(X_train,y_train,epochs=10,batch_size=200,verbose=1,validation_data=(X_test,y_test))
     
     # Save parameters to JSON file
     model_json = model.to_json()
@@ -159,7 +160,7 @@ else:
         json_file.write(model_json)
 
     # Save model weights to file
-    model.save('D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\mlp_weights_final.h5')
+    model.save('D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\mlp_weights_22.h5')
 
 
 model.summary()
