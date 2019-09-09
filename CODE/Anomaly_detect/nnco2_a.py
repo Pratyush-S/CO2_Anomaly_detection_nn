@@ -28,12 +28,12 @@ def loadmodel():
     global model
     
     # Model reconstruction from JSON file
-    json_file = open('mlp_arch_2019_c.json', 'r')
+    json_file = open('mlp_arch_2019_22.json', 'r')
     loaded_model_json = json_file.read()
     
     json_file.close()
     model = model_from_json(loaded_model_json)
-    model.load_weights('mlp_weights_CO2_c.h5')
+    model.load_weights('mlp_weights_22.h5')
     model.compile(Adam(lr=0.001),'categorical_crossentropy',metrics=['accuracy'])
 
     print('model loaded')

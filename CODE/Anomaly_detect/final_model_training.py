@@ -13,7 +13,7 @@ from keras.models import model_from_json
 
 
 # For reproducibility - splitting train and test sets
-seed = 127
+seed = 124
 np.random.seed(seed)
 
 
@@ -116,7 +116,7 @@ X_complete=X_complete.values
 y_complete=y_complete.values
 
 # Creating a Train and a Test Dataset
-X_train, X_test, y_train, y_test = train_test_split(X_complete, y_complete, test_size=0.1, random_state=seed)
+X_train, X_test, y_train, y_test = train_test_split(X_complete, y_complete, test_size=0.3, random_state=seed)
 
 
 # Define Neural Network model layers
@@ -125,8 +125,6 @@ model.add(Dense(20, input_dim=22, activation='relu'))
 #model.add(Dense(10, input_dim=11, activation='softmax'))
 model.add(Dense(20, activation='relu'))
 model.add(Dense(20, activation='relu'))
-model.add(Dense(20, activation='relu'))
-
 model.add(Dense(5, activation='softmax'))
 
 # Compile model
@@ -135,16 +133,16 @@ model.compile(Adam(lr=0.01),'categorical_crossentropy',metrics=['accuracy'])
 
 
 
-if os.path.isfile('#mlp_weights_final.h5'):
+if os.path.isfile('anew_model_severityl.h5'):
 
     # Model reconstruction from JSON file
-    json_file = open('mlp_arch_2019_16.json', 'r')
+    json_file = open('new_model_severity.json', 'r')
     loaded_model_json = json_file.read()
     json_file.close()
     model = model_from_json(loaded_model_json)
     
     # Load weights into the new model
-    model.load_weights('mlp_arch_2019_16.h5')
+    model.load_weights('new_model_severity.h5')
     print("Model weights loaded from saved model data.")
 
     model.compile(Adam(lr=0.0001),'categorical_crossentropy',metrics=['accuracy'])
@@ -152,15 +150,16 @@ else:
     print("Model weights data not found. Model will be fit on training set now.")
 
     # Fit model on training data - try to replicate the normal input
-    model.fit(X_train,y_train,epochs=10,batch_size=200,verbose=1,validation_data=(X_test,y_test))
+    model.fit(X_train,y_train,epochs=30,batch_size=200,verbose=1,validation_data=(X_test,y_test))
     
-    # Save parameters to JSON file
+ 
+         # Save parameters to JSON file
     model_json = model.to_json()
-    with open("mlp_arch_2019_22.json", "w") as json_file:
+    with open("new_model_severity.json", "w") as json_file:
         json_file.write(model_json)
 
     # Save model weights to file
-    model.save('D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\mlp_weights_22.h5')
+    model.save_weights('new_model_severity.h5')
 
 
 model.summary()
