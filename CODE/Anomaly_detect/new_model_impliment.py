@@ -159,7 +159,7 @@ def predict(co1,dz1,co2,dz2,co3,dz3,co4,dz4,co5,dz5,co6,dz6,T,Pcabin,H,P):
 
 def class_to_lim(clas):
     return {
-        0:10,
+        0:2,
         1:4,
         2:4,
         3:2,
@@ -168,7 +168,7 @@ def class_to_lim(clas):
 
 def cal_error_th(clas,all_dev):
     
-    lower_th=0.03;
+    lower_th=0.03
     upper_th=class_to_lim(clas)
    
     max_dev=max([abs(x) for x in all_dev])
@@ -182,6 +182,7 @@ def cal_error_th(clas,all_dev):
     
     print("Severity:         "+str(severity))
     print("Error threshold: "+str(error_th)+"%")
+    print("------------------------------------------")
 #    return severity,error_th
 
 
