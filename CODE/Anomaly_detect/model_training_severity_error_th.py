@@ -59,13 +59,19 @@ avg_val=(dataset['CO2_Zone_1']+dataset['CO2_Zone_2']+dataset['CO2_Zone_3']+datas
 #avg_slope=(dataset['dz1']+dataset['dz2']+dataset['dz3']+dataset['dz4']+dataset['dz5']+dataset['dz6'])/6
 #assigning different values to each output class
 
-diffz1=pd.DataFrame(avg_val-dataset['CO2_Zone_1'])
-diffz2=pd.DataFrame(avg_val-dataset['CO2_Zone_2'])
-diffz3=pd.DataFrame(avg_val-dataset['CO2_Zone_3'])
-diffz4=pd.DataFrame(avg_val-dataset['CO2_Zone_4'])
-diffz5=pd.DataFrame(avg_val-dataset['CO2_Zone_5'])
-diffz6=pd.DataFrame(avg_val-dataset['CO2_Zone_6'])
+diffz1=avg_val-dataset['CO2_Zone_1']
+diffz2=avg_val-dataset['CO2_Zone_2']
+diffz3=avg_val-dataset['CO2_Zone_3']
+diffz4=avg_val-dataset['CO2_Zone_4']
+diffz5=avg_val-dataset['CO2_Zone_5']
+diffz6=avg_val-dataset['CO2_Zone_6']
 
+
+frames2=[diffz1,diffz2,diffz3,diffz4,diffz5,diffz6]
+dataset_2=pd.concat(frames2, axis=1)
+dataset_2.columns=['dif1','dif2','dif3','dif4','dif5','dif6']
+
+dataset=pd.concat([dataset,dataset_2],axis=1)
 
 
 
@@ -79,6 +85,46 @@ dataset = dataset.sample(frac=1).reset_index(drop=True)
 
 
 
+
+#############################################################################################################################################################################
+
+
+def class_to_lim(clas1):
+    return {
+        1:2,
+        2:4,
+        3:4,
+        4:2,
+        5:3
+            }.get(clas1,3)
+
+
+def cal_error_th(clas,all_devi):
+    
+    lower_th=0.03
+    upper_th=class_to_lim(clas)
+   
+    max_dev=max([abs(x) for x in all_devi])
+
+
+    if(max_dev>upper_th):    
+        level_2[i]=1
+        severity=2
+    elif(max_dev<=lower_th):
+        level_0[i]=1
+        severity=0
+    else:                   
+        level_1[i]=1
+        severity=1
+        
+
+    error_th=15-5*severity
+    
+    #print("Severity:         "+str(severity))
+    #print("Error threshold: "+str(error_th)+"%")
+    #print("------------------------------------------")
+    return error_th
+
 #############################################################################################################################################################################
 
 class_total=dataset['class_0']*1+dataset['class_1']*2+dataset['class_2']*3+dataset['class_3']*4+dataset['class_4']*5
@@ -91,7 +137,7 @@ level_1=dataset['class_1']*0
 level_2=dataset['class_1']*0
 error_th=dataset['class_1']*0
 
-for i in range(0,10):
+for i in range(0,dataset.shape[0]-1):
        #single_dev=all_dev[i:i+1].tolist()
        
       
@@ -101,31 +147,22 @@ for i in range(0,10):
        error_th[i]= cal_error_th(clas,single_dev)
        
 print(error_th[0:11])   
-  
-    
-
-frame2=[level_0,level_1,level_2]
-dataset_lvl=pd.concat(frame2, axis=1)
-dataset_lvl.columns=['level_0','level_1','level_2']
-
-print(dataset_lvl[0:11])   
-    
+ 
 
 #############################################################################################################################################################################
+frames3=[class_total,level_0,level_1,level_2]
+dataset_3=pd.concat(frames3, axis=1)
+dataset_3.columns=['class_total','level_0','level_1','level_2']
 
-frames3=[diffz1,diffz2,diffz3,diffz4,diffz5,diffz6,class_total,level_0,level_1,level_2]
-dataset_2=pd.concat(frames3, axis=1)
-dataset_2.columns=['dif1','dif2','dif3','dif4','dif5','dif6','class_total','level_0','level_1','level_2']
-
-dataset=pd.concat([dataset,dataset_2],axis=1)
+dataset=pd.concat([dataset,dataset_3],axis=1)
 
 
 
 #X_complete=dataset.drop(['dz2','dz3','dz4','dz5','dz6','class_0','class_1','class_2','class_3','class_4'],axis=1)
 #X_complete=dataset.drop(['class_0','class_1','class_2','class_3','class_4'],axis=1)
-X_complete=dataset.drop(['class_0','class_1','class_2','class_3','class_4','class_total', 'level_0', 'level_1', 'level_2'],axis=1)
+X_complete=dataset.drop(['class_0','class_1','class_2','class_3','class_4', 'level_0', 'level_1', 'level_2'],axis=1)
 #y_complete=dataset['Class','zone_1']
-y_complete=dataset[['class_0','class_1','class_2','class_3','class_4']]
+y_complete=dataset[['level_0', 'level_1', 'level_2']]
 print("Unnormalized Data", "\n", X_complete[:5], "\n")
 print("Unnormalized Data", "\n", y_complete[:5], "\n")
 
@@ -140,6 +177,7 @@ for i in col:
     print(sd)
     print(i)
     
+X_complete['class_total']=class_total
     
 
     
@@ -158,11 +196,11 @@ X_train, X_test, y_train, y_test = train_test_split(X_complete, y_complete, test
 
 # Define Neural Network model layers
 model = Sequential()
-model.add(Dense(15, input_dim=22, activation='relu'))
+model.add(Dense(10, input_dim=23, activation='relu'))
 #model.add(Dense(10, input_dim=11, activation='softmax'))
-model.add(Dense(12, activation='relu'))
-model.add(Dense(12, activation='relu'))
-model.add(Dense(5, activation='softmax'))
+model.add(Dense(10, activation='relu'))
+#model.add(Dense(5, activation='relu'))
+model.add(Dense(3, activation='softmax'))
 
 # Compile model
 model.compile(Adam(lr=0.01),'categorical_crossentropy',metrics=['accuracy'])
@@ -187,7 +225,7 @@ else:
     print("Model weights data not found. Model will be fit on training set now.")
 
     # Fit model on training data - try to replicate the normal input
-    model.fit(X_train,y_train,epochs=30,batch_size=200,verbose=1,validation_data=(X_test,y_test))
+    model.fit(X_train,y_train,epochs=45,batch_size=200,verbose=1,validation_data=(X_test,y_test))
     
  
          # Save parameters to JSON file
@@ -221,43 +259,3 @@ from sklearn.metrics import classification_report,confusion_matrix
 print(classification_report(y_test_class,y_pred_class))
 print(confusion_matrix(y_test_class,y_pred_class))
 
-
-
-#############################################################################################################################################################################
-
-
-def class_to_lim(clas1):
-    return {
-        0:2,
-        1:4,
-        2:4,
-        3:2,
-        4:3
-            }.get(clas1,3)
-
-
-def cal_error_th(clas,all_devi):
-    
-    lower_th=0.03
-    upper_th=class_to_lim(clas)
-   
-    max_dev=max([abs(x) for x in all_devi])
-
-
-    if(max_dev>upper_th):    
-        level_2[i]=2
-        severity=2
-    elif(max_dev<=lower_th):
-        level_0[i]=1
-        severity=0
-    else:                   
-        level_1[i]=1
-        severity=1
-        
-
-    error_th=15-5*severity
-    
-    #print("Severity:         "+str(severity))
-    #print("Error threshold: "+str(error_th)+"%")
-    #print("------------------------------------------")
-    return error_th

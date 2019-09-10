@@ -25,18 +25,34 @@ err = []
 global Pas,press,temp,humid  #new variables
 
 def loadmodel():
-    global model
+    global model_anomaly
+    global model_severity    
     
     # Model reconstruction from JSON file
     json_file = open('new_model_severity.json', 'r')
     loaded_model_json = json_file.read()
     
     json_file.close()
-    model = model_from_json(loaded_model_json)
-    model.load_weights('new_model_severity.h5')
-    model.compile(Adam(lr=0.001),'categorical_crossentropy',metrics=['accuracy'])
+    model_anomaly = model_from_json(loaded_model_json)
+    model_anomaly.load_weights('new_model_severity.h5')
+    model_anomaly.compile(Adam(lr=0.001),'categorical_crossentropy',metrics=['accuracy'])
 
-    print('model loaded')
+    print('Anomaly model loaded')
+    
+        # Model reconstruction from JSON file
+    json_file = open('new_model_severity_error_th.json', 'r')
+    loaded_model_json = json_file.read()
+    
+    json_file.close()
+    model_severity = model_from_json(loaded_model_json)
+    model_severity.load_weights('new_model_severity_error_th.h5')
+    model_severity.compile(Adam(lr=0.001),'categorical_crossentropy',metrics=['accuracy'])
+
+    print('Severity model loaded')
+
+
+
+
 
 loadmodel()
 
@@ -133,57 +149,55 @@ def predict(co1,dz1,co2,dz2,co3,dz3,co4,dz4,co5,dz5,co6,dz6,T,Pcabin,H,P):
     ii=((H-0.07916)/0.0636);
     j=((P-79.2352)/61.2388);
               
-    d1=(dif1-0.8916)/9.294;
-    d2=(dif2-0.8916)/9.294;
-    d3=(dif3-0.8916)/9.294;
-    d4=(dif4-0.8916)/9.294;
-    d5=(dif5-0.8916)/9.294;
-    d6=(dif6-0.8916)/9.294;
+    a= ((co1-1450.3748089341545)/1105.3766530927035);
+    da=((dz1-0.06730150028018703)/2.216723342719636);
+    b= ((co2-1450.3748089341545)/1105.3766530927035);
+    db=((dz2-0.06730150028018703)/2.216723342719636);
+    c= ((co3-1450.3748089341545)/1105.3766530927035);
+    dc=((dz3-0.06730150028018703)/2.216723342719636);
+    d= ((co4-1450.3748089341545)/1105.3766530927035);
+    dd=((dz4-0.06730150028018703)/2.216723342719636);
+    e= ((co5-1450.3748089341545)/1105.3766530927035);
+    de=((dz5-0.06730150028018703)/2.216723342719636);
+    f= ((co6-1450.3748089341545)/1105.3766530927035);
+    df=((dz6-0.06730150028018703)/2.216723342719636);
+
+ 
+
+    g=((T-21.9998)/0.269869707571444);
+    h=((Pcabin-80.000021)/0.000227);
+    ii=((H-0.09891256672715397)/0.1116383178067835);
+    j=((P-91.40854447325829)/60.20954481801682);
     
-    all_dev=[da,db,dc,dd,de,df]
-    
-    V_X=pd.DataFrame({'CO2_Zone_1':a, 'dz1':da, 'CO2_Zone_2':b, 'dz2':db, 'CO2_Zone_3':c, 'dz3':dc,'CO2_Zone_4':d, 'dz4':dd, 'CO2_Zone_5':e, 'dz5':de, 'CO2_Zone_6':f, 'dz6':df, 'temp_f':g,'press_f':h, 'humid_f':ii, 'pass_f':j,'dif1':d1, 'dif2':d2, 'dif3':d3, 'dif4':d4, 'dif5':d5, 'dif6':d5},index=[0])
+    d1=(dif1+0.8916)/8.4227;
+    d2=(dif2+0.8916)/8.4227;
+    d3=(dif3+0.8916)/8.4227;
+    d4=(dif4+0.8916)/8.4227;
+    d5=(dif5+0.8916)/8.4227;
+    d6=(dif6+0.8916)/8.4227;
+        
+    V_X=pd.DataFrame({'CO2_Zone_1':a, 'dz1':da, 'CO2_Zone_2':b, 'dz2':db, 'CO2_Zone_3':c, 'dz3':dc,'CO2_Zone_4':d, 'dz4':dd, 'CO2_Zone_5':e, 'dz5':de, 'CO2_Zone_6':f, 'dz6':df, 'temp_f':g,'press_f':h, 'humid_f':ii, 'pass_f':j,'dif1':d1, 'dif2':d2, 'dif3':d3, 'dif4':d4, 'dif5':d5, 'dif6':d6},index=[0])
     #V_X=pd.DataFrame({'CO2_Zone_1':a,'dz1':da,'CO2_Zone_2':b,'dz2':db,'CO2_Zone_3':c,'dz3':dc,'CO2_Zone_4':d,'dz4':dd,'CO2_Zone_5':e,'dz5':de,'CO2_Zone_6':f,'dz6':df,'temp_f':g,'press_f':h,'humid_f':i,'pass_f':j},index=[0])
     # V_X=pd.DataFrame({a,da,b,db,c,dc,d,dd,e,de,f,df,g,h,i,j})
- 
     X_test = V_X.values
-    y_pred = model.predict(X_test)
-  
+    y_pred = model_anomaly.predict(X_test)
     y_pred_class = int(np.argmax(y_pred,axis=1))
-
-    print("Anomaly class:    "+str(y_pred_class))
     
     
-    cal_error_th(y_pred_class,all_dev)
+    V_X2=pd.DataFrame({'CO2_Zone_1':a, 'dz1':da, 'CO2_Zone_2':b, 'dz2':db, 'CO2_Zone_3':c, 'dz3':dc,'CO2_Zone_4':d, 'dz4':dd, 'CO2_Zone_5':e, 'dz5':de, 'CO2_Zone_6':f, 'dz6':df, 'temp_f':g,'press_f':h, 'humid_f':ii, 'pass_f':j,'dif1':d1, 'dif2':d2, 'dif3':d3, 'dif4':d4, 'dif5':d5, 'dif6':d5,'class_total':y_pred_class},index=[0])
+    X_test2 = V_X2.values
+    y_pred2 = model_severity.predict(X_test2)
+    y_pred_severity = int(np.argmax(y_pred2,axis=1))
     
 
-def class_to_lim(clas):
-    return {
-        0:2,
-        1:4,
-        2:4,
-        3:2,
-        4:3
-            }.get(clas,3)
-
-def cal_error_th(clas,all_dev):
+    print("Anomaly class :    "+str(y_pred_class))
+    print("Severity level:    "+str(y_pred_severity))
     
-    lower_th=0.03
-    upper_th=class_to_lim(clas)
-   
-    max_dev=max([abs(x) for x in all_dev])
-
-
-    if(max_dev>upper_th): severity=2
-    elif(max_dev<=lower_th): severity=0
-    else: severity=1
-
-    error_th=15-5*severity
+    print("-----------------------------------------------------")
     
-    print("Severity:         "+str(severity))
-    print("Error threshold: "+str(error_th)+"%")
-    print("------------------------------------------")
-#    return severity,error_th
+    
+    
+
 
 
 #############################################################################################################################################################################

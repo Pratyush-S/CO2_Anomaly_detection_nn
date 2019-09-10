@@ -103,7 +103,7 @@ for i in col:
     print(sd)
     print(i)
     
-    
+
 
     
 print("Normalized Data\n", X_complete[:5], "\n")
