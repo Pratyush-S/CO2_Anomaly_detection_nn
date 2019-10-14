@@ -79,6 +79,7 @@ dataset=pd.concat([dataset,dataset_2],axis=1)
 #https://stackoverflow.com/questions/29576430/shuffle-dataframe-rows
 dataset = dataset.sample(frac=1).reset_index(drop=True)
 
+dataset=dataset.reset_index(drop=True)
 #dataseta = dataset1.sample(frac=1).reset_index(drop=True)
 
 
@@ -121,45 +122,46 @@ X_train, X_test, y_train, y_test = train_test_split(X_complete, y_complete, test
 
 # Define Neural Network model layers
 model = Sequential()
-model.add(Dense(20, input_dim=22, activation='relu'))
+model.add(Dense(10, input_dim=22, activation='relu'))
 #model.add(Dense(10, input_dim=11, activation='softmax'))
-model.add(Dense(20, activation='relu'))
-model.add(Dense(20, activation='relu'))
+model.add(Dense(10, activation='relu'))
+model.add(Dense(10, activation='relu'))
+
 model.add(Dense(5, activation='softmax'))
 
 # Compile model
-model.compile(Adam(lr=0.01),'categorical_crossentropy',metrics=['accuracy'])
+model.compile(Adam(lr=0.001),'categorical_crossentropy',metrics=['accuracy'])
 
 
 
 
-if os.path.isfile('anew_model_severityl.h5'):
+if os.path.isfile('@anomaly_detect.h5'):
 
     # Model reconstruction from JSON file
-    json_file = open('new_model_severity.json', 'r')
+    json_file = open('anomaly_detect.json', 'r')
     loaded_model_json = json_file.read()
     json_file.close()
     model = model_from_json(loaded_model_json)
     
     # Load weights into the new model
-    model.load_weights('new_model_severity.h5')
+    model.load_weights('anomaly_detect.h5')
     print("Model weights loaded from saved model data.")
 
-    model.compile(Adam(lr=0.0001),'categorical_crossentropy',metrics=['accuracy'])
+    model.compile(Adam(lr=0.001),'categorical_crossentropy',metrics=['accuracy'])
 else:
     print("Model weights data not found. Model will be fit on training set now.")
 
     # Fit model on training data - try to replicate the normal input
-    model.fit(X_train,y_train,epochs=30,batch_size=200,verbose=1,validation_data=(X_test,y_test))
+    history=model.fit(X_train,y_train,epochs=100,batch_size=200,verbose=1,validation_data=(X_test,y_test))
     
  
          # Save parameters to JSON file
     model_json = model.to_json()
-    with open("new_model_severity.json", "w") as json_file:
+    with open("anomaly_detect.json", "w") as json_file:
         json_file.write(model_json)
 
     # Save model weights to file
-    model.save_weights('new_model_severity.h5')
+    model.save_weights('anomaly_detect.h5')
 
 
 model.summary()
@@ -183,4 +185,10 @@ score = model.evaluate(X_complete,y_complete, batch_size=128,verbose=1)
 from sklearn.metrics import classification_report,confusion_matrix
 print(classification_report(y_test_class,y_pred_class))
 print(confusion_matrix(y_test_class,y_pred_class))
+
+
+
+plt.plot(history.history['acc'])
+plt.plot(history.history['val_acc'])
+plt.legend(['train', 'test'], loc='upper left')
 
