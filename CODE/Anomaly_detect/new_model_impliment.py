@@ -36,18 +36,15 @@ def loadmodel():
     model_anomaly = model_from_json(loaded_model_json)
     model_anomaly.load_weights('new_model_severity.h5')
     model_anomaly.compile(Adam(lr=0.001),'categorical_crossentropy',metrics=['accuracy'])
-
     print('Anomaly model loaded')
     
         # Model reconstruction from JSON file
     json_file = open('new_model_severity_error_th.json', 'r')
-    loaded_model_json = json_file.read()
-    
+    loaded_model_json = json_file.read()    
     json_file.close()
     model_severity = model_from_json(loaded_model_json)
     model_severity.load_weights('new_model_severity_error_th.h5')
     model_severity.compile(Adam(lr=0.001),'categorical_crossentropy',metrics=['accuracy'])
-
     print('Severity model loaded')
 
 

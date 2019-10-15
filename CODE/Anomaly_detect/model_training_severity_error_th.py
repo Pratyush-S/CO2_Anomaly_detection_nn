@@ -91,7 +91,7 @@ dataset = dataset.sample(frac=1).reset_index(drop=True)
 
 def class_to_lim(clas1):
     return {
-        1:2,
+        1:5,
         2:4,
         3:4,
         4:2,
@@ -99,43 +99,44 @@ def class_to_lim(clas1):
             }.get(clas1,3)
 
 
-def cal_error_th(clas,all_devi):
-    
+def cal_severity(clas,single_dev):
+    severity=0
     lower_th=0.03
     upper_th=class_to_lim(clas)
    
-    max_dev=max([abs(x) for x in all_devi])
+    max_dev=max([abs(x) for x in single_dev])
 
-
-    if(max_dev>upper_th):    
-        level_2[i]=1
-        severity=2
-    elif(max_dev<=lower_th):
-        level_0[i]=1
-        severity=0
-    else:                   
-        level_1[i]=1
-        severity=1
+    if(clas>1):
+        if(max_dev>upper_th):    
+            
+            severity=2
+        elif(max_dev<=lower_th):
+            
+            severity=0
+        else:                   
+            
+            severity=1
         
-
-    error_th=15-5*severity
-    
     #print("Severity:         "+str(severity))
     #print("Error threshold: "+str(error_th)+"%")
     #print("------------------------------------------")
-    return error_th
+    return severity
 
 #############################################################################################################################################################################
+
+
 
 class_total=dataset['class_0']*1+dataset['class_1']*2+dataset['class_2']*3+dataset['class_3']*4+dataset['class_4']*5
 
 all_dev=dataset[['dz1','dz2','dz3','dz4','dz5','dz6']]
 
+#To generate empty datasets
+#level_0=dataset['class_1']*0
+#level_1=dataset['class_1']*0
+#level_2=dataset['class_1']*0
 
-level_0=dataset['class_1']*0
-level_1=dataset['class_1']*0
-level_2=dataset['class_1']*0
-error_th=dataset['class_1']*0
+severity_ary=dataset['class_1']*0
+
 
 for i in range(0,dataset.shape[0]-1):
        #single_dev=all_dev[i:i+1].tolist()
@@ -144,41 +145,47 @@ for i in range(0,dataset.shape[0]-1):
        single_dev=[all_dev[i:i+1].values[0][0],all_dev[i:i+1].values[0][1],all_dev[i:i+1].values[0][2],all_dev[i:i+1].values[0][3],all_dev[i:i+1].values[0][4],all_dev[i:i+1].values[0][5]]
        
        clas=class_total[i]
-       error_th[i]= cal_error_th(clas,single_dev)
+       severity_ary[i]= cal_severity(clas,single_dev)
        
-print(error_th[0:11])   
- 
+print(severity_ary[0:11])
+print(class_total[0:11]) 
 
 #############################################################################################################################################################################
-frames3=[class_total,level_0,level_1,level_2]
-dataset_3=pd.concat(frames3, axis=1)
-dataset_3.columns=['class_total','level_0','level_1','level_2']
-
-dataset=pd.concat([dataset,dataset_3],axis=1)
 
 
+
+frame=[class_total,severity_ary]
+dataset_new_data=pd.concat(frame, axis=1)
+
+dataset_new_data.columns=['class_total','severity']
+
+dataset=pd.concat([dataset,dataset_new_data],axis=1)
+
+
+
+
+dataset.to_excel(r'D:\PS!\Data_Management\temp files\a.xlsx')
+        
 
 #X_complete=dataset.drop(['dz2','dz3','dz4','dz5','dz6','class_0','class_1','class_2','class_3','class_4'],axis=1)
 #X_complete=dataset.drop(['class_0','class_1','class_2','class_3','class_4'],axis=1)
-X_complete=dataset.drop(['class_0','class_1','class_2','class_3','class_4', 'level_0', 'level_1', 'level_2'],axis=1)
+X_complete2=dataset.drop([ 'class_0', 'class_1', 'class_2','class_3', 'class_4','dif1', 'dif2', 'dif3', 'dif4', 'dif5', 'dif6'],axis=1)
 #y_complete=dataset['Class','zone_1']
-y_complete=dataset[['level_0', 'level_1', 'level_2']]
+y_complete=dataset[[ 'severity']]
 print("Unnormalized Data", "\n", X_complete[:5], "\n")
 print("Unnormalized Data", "\n", y_complete[:5], "\n")
 
 # Feature scaling according to training set data 
 col=list(X_complete.columns.values)
 
-for i in col:
+for i in col[:-1]:
     avg=X_complete[str(i)].mean()
     sd=X_complete[str(i)].std()
     X_complete[str(i)]=X_complete[str(i)].apply(lambda X:(X-avg)/(sd))
     print(avg)
     print(sd)
     print(i)
-    
-X_complete['class_total']=class_total
-    
+  
 
     
 print("Normalized Data\n", X_complete[:5], "\n")
@@ -188,7 +195,8 @@ X_complete=X_complete.values
 
 #One hot encoding
 #_complete= pd.get_dummies(y_complete).values
-y_complete=y_complete.values
+y_complete=pd.get_dummies(y_complete['severity'])
+
 
 # Creating a Train and a Test Dataset
 X_train, X_test, y_train, y_test = train_test_split(X_complete, y_complete, test_size=0.3, random_state=seed)
@@ -196,7 +204,7 @@ X_train, X_test, y_train, y_test = train_test_split(X_complete, y_complete, test
 
 # Define Neural Network model layers
 model = Sequential()
-model.add(Dense(10, input_dim=23, activation='relu'))
+model.add(Dense(10, input_dim=17, activation='relu'))
 #model.add(Dense(10, input_dim=11, activation='softmax'))
 model.add(Dense(10, activation='relu'))
 #model.add(Dense(5, activation='relu'))
@@ -208,7 +216,7 @@ model.compile(Adam(lr=0.01),'categorical_crossentropy',metrics=['accuracy'])
 
 
 
-if os.path.isfile('anew_model_severityl.h5'):
+if os.path.isfile('@new_model_severityl.h5'):
 
     # Model reconstruction from JSON file
     json_file = open('new_model_severity.json', 'r')
@@ -225,7 +233,7 @@ else:
     print("Model weights data not found. Model will be fit on training set now.")
 
     # Fit model on training data - try to replicate the normal input
-    model.fit(X_train,y_train,epochs=45,batch_size=200,verbose=1,validation_data=(X_test,y_test))
+    history=model.fit(X_train,y_train,epochs=45,batch_size=200,verbose=1,validation_data=(X_test,y_test))
     
  
          # Save parameters to JSON file
@@ -258,4 +266,11 @@ score = model.evaluate(X_complete,y_complete, batch_size=128,verbose=1)
 from sklearn.metrics import classification_report,confusion_matrix
 print(classification_report(y_test_class,y_pred_class))
 print(confusion_matrix(y_test_class,y_pred_class))
+
+
+plt.plot(history.history['acc'])
+plt.plot(history.history['val_acc'])
+plt.legend(['train', 'test'], loc='upper left')
+
+
 

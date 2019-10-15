@@ -49,7 +49,7 @@ dataset18 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\tra
 dataset19 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\training dataset\class3_b\training_set_4hr_pascnt_170.xlsx')
 
 #Combine datasets into one single data file
-frames=[dataset1, dataset2, dataset3, dataset4, dataset5, dataset6, dataset7, dataset8, dataset9, dataset10, dataset11, dataset12, dataset13, dataset14, dataset15, dataset16, dataset17,dataset18,dataset19,dataset20,dataset21,dataset22,dataset23,dataset24]
+frames=[dataset11, dataset2, dataset3, dataset4, dataset5, dataset6, dataset7, dataset8, dataset9, dataset10, dataset1, dataset12, dataset13, dataset14, dataset15, dataset16, dataset17,dataset18,dataset19,dataset20,dataset21,dataset22,dataset23,dataset24]
 #frames=[dataset1, dataset2, dataset3, dataset4, dataset5,dataset6, dataset7, dataset20, dataset21, dataset22]
 
 dataset = pd.concat(frames)
@@ -185,6 +185,8 @@ score = model.evaluate(X_complete,y_complete, batch_size=128,verbose=1)
 from sklearn.metrics import classification_report,confusion_matrix
 print(classification_report(y_test_class,y_pred_class))
 print(confusion_matrix(y_test_class,y_pred_class))
+
+
 
 
 
