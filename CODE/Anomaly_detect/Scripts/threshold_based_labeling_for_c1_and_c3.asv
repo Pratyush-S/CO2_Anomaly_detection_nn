@@ -74,10 +74,10 @@ final_array=cat(2,CO2_Zone_1,dz1,CO2_Zone_2,dz2,CO2_Zone_3,dz3,CO2_Zone_4,dz4,CO
 final_table=array2table(final_array,'VariableNames',{'CO2_Zone_1','dz1','CO2_Zone_2','dz2','CO2_Zone_3','dz3','CO2_Zone_4','dz4','CO2_Zone_5','dz5','CO2_Zone_6','dz6','temp_f','press_f','humid_f','pass_f','class_0','class_1','class_2','class_3','class_4'});
 
 %file_name=strcat('TS_C1_P_set_3hr_pascnt_10.xlsx');
-file_name=strcat('C3_P',num2str(pass_f(12)),'_D',num2str(y),'_TS.xlsx');
+file_name=strcat('C2_P',num2str(pass_f(12)),'_D',num2str(y),'_TS.xlsx');
 
-%%  
-writetable(final_table,file_name)
+%%
+writetable(final_table,file_name); 
 
 
 %%
