@@ -9,7 +9,7 @@ from keras.optimizers import SGD,Adam
 import os.path
 import json
 from keras.models import model_from_json
-
+import matplotlib.pyplot as plt
 
 
 # For reproducibility - splitting train and test sets

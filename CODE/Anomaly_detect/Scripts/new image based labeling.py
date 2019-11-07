@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 #address="D:\PS!\dg models\Data_generation\diffusion added\raw_data\C1\1_10\C1_P10_D240_TS.xlsx"
-dataset1 = pd.read_excel(r'D:\PS!\dg models\Data_generation\diffusion added\raw_data\C2\2_10\C2_P10_D240_TS.xlsx')
+dataset1 = pd.read_excel(r'D:\PS!\dg models\Data_generation\diffusion added\raw_data\C1\1_10\C1_P10_D240_TS.xlsx')
 col=dataset1.columns
 
     
