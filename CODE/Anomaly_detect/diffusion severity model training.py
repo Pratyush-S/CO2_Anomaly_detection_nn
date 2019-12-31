@@ -15,7 +15,46 @@ seed = 124
 np.random.seed(seed)
 
 #Importing datasets
-#class1
+###############################################################################################################################
+################################################################################################################
+avg_array=[1713.5323763512292,
+ 0.08760651186291118,
+ 1694.4256119631375,
+ 0.08627750036701946,
+ 1691.2298889705223,
+ 0.08776716632013695,
+ 1691.6902062117085,
+ 0.08812124568601862,
+ 1691.880886499942,
+ 0.08725316141932586,
+ 1688.407582924399,
+ 0.08677699855205569,
+ 21.9976924259261,
+ 80.00000888888754,
+ 0.0909368849628335,
+ 99.6]
+
+sd_array=[1643.5227474594326,
+ 4.644740193277256,
+ 1637.9669659562214,
+ 4.683437399603012,
+ 1622.3815110560924,
+ 4.593012563995032,
+ 1622.0594629738184,
+ 4.639638381040414,
+ 1645.7269775537643,
+ 4.652622700633985,
+ 1621.673275566828,
+ 4.6061488048463515,
+ 0.049069506919712146,
+ 0.000219179502789205,
+ 0.07979031620288202,
+ 56.82824973050747]
+###############################################################################################################################
+
+##Importing datasets
+##class1
+
 dataset1 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\final training data\C1_P10_labeled.xlsx')
 dataset2 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\final training data\C1_P30_labeled.xlsx')
 dataset3 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\final training data\C1_P50_labeled.xlsx')
@@ -25,9 +64,7 @@ dataset6 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\fina
 dataset7 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\final training data\C1_P130_labeled.xlsx')
 dataset8 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\final training data\C1_P150_labeled.xlsx')
 dataset9 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\final training data\C1_P170_labeled.xlsx')
-dataset10 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\final training data\C1_P186_labeled.xlsx')
-
-        
+dataset10 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\final training data\C1_P186_labeled.xlsx')        
 #class2
 dataset11 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\final training data\C2_P10_labeled.xlsx')
 dataset12 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\final training data\C2_P30_labeled.xlsx')
@@ -39,8 +76,6 @@ dataset17 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\fin
 dataset18 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\final training data\C2_P150_labeled.xlsx')
 dataset19 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\final training data\C2_P170_labeled.xlsx')
 dataset20 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\final training data\C2_P186_labeled.xlsx')
-
-
 #class3
 dataset21 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\final training data\C3_P10_labeled.xlsx')
 dataset22 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\final training data\C3_P30_labeled.xlsx')
@@ -53,6 +88,7 @@ dataset28 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\fin
 dataset29 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\final training data\C3_P170_labeled.xlsx')
 dataset30 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\final training data\C3_P186_labeled.xlsx')
 
+###############################################################################################################################
 
 
 
@@ -60,49 +96,32 @@ dataset30 = pd.read_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\fin
 frames=[dataset1, dataset2, dataset3, dataset4, dataset5, dataset6, dataset7, dataset8, dataset9, dataset10, dataset11, dataset12, dataset13, dataset14, dataset15, dataset16, dataset17, dataset18, dataset19, dataset20, dataset21, dataset22, dataset23, dataset24, dataset25, dataset26, dataset27, dataset28, dataset29, dataset30]
 dataset = pd.concat(frames)
 
-#dataset=dataset22
-#col=dataset.columns.values
-#dataset=dataset.drop(col[0],axis=1)
-
-avg_val=(dataset['CO2_Zone_1']+dataset['CO2_Zone_2']+dataset['CO2_Zone_3']+dataset['CO2_Zone_4']+dataset['CO2_Zone_5']+dataset['CO2_Zone_6'])/6
-#avg_slope=(dataset['dz1']+dataset['dz2']+dataset['dz3']+dataset['dz4']+dataset['dz5']+dataset['dz6'])/6
-#assigning different values to each output class
-
-diffz1=pd.DataFrame(avg_val-dataset['CO2_Zone_1'])
-diffz2=pd.DataFrame(avg_val-dataset['CO2_Zone_2'])
-diffz3=pd.DataFrame(avg_val-dataset['CO2_Zone_3'])
-diffz4=pd.DataFrame(avg_val-dataset['CO2_Zone_4'])
-diffz5=pd.DataFrame(avg_val-dataset['CO2_Zone_5'])
-diffz6=pd.DataFrame(avg_val-dataset['CO2_Zone_6'])
-
-#creating dataframe for deviation from mean
-frames2=[diffz1,diffz2,diffz3,diffz4,diffz5,diffz6]
-dataset_2=pd.concat(frames2, axis=1)
-dataset_2.columns=['dif1','dif2','dif3','dif4','dif5','dif6']
-
-dataset=pd.concat([dataset,dataset_2],axis=1)
 
 
-dataset = dataset.sample(frac=1).reset_index(drop=True)
 col=dataset.columns.values
+print(col)
+
+
 dataset=dataset.drop(col[0],axis=1)
+dataset = dataset.reset_index(drop=True)
+
 
 #############################################################################################################################################################################
 
 
 def class_to_lim(clas1):
     return {
-        1:10,
-        2:4,
-        3:4,
-        4:2,
-        5:3
-            }.get(clas1,3)
+        1:20,
+        2:0.5,
+        3:2,
+        4:6,
+        5:8
+            }.get(clas1,20)
 
 
 def cal_severity(clas,single_dev):
     severity=0
-    lower_th=0.03
+    lower_th=0.02
     upper_th=class_to_lim(clas)
    
     max_dev=max([abs(x) for x in single_dev])
@@ -117,7 +136,8 @@ def cal_severity(clas,single_dev):
         else:                   
             
             severity=1
-        
+    else:
+        severity=0
     #print("Severity:         "+str(severity))
     #print("Error threshold: "+str(error_th)+"%")
     #print("------------------------------------------")
@@ -126,9 +146,9 @@ def cal_severity(clas,single_dev):
 #############################################################################################################################################################################
 
 
-class_total=dataset['class_0']*1+dataset['class_1']*2+dataset['class_2']*3+dataset['class_3']*4+dataset['class_4']*5
+class_total=dataset['class_0']*0+dataset['class_1']*1+dataset['class_2']*2+dataset['class_3']*3+dataset['class_4']*4   
 
-all_dev=dataset[['dz1','dz2','dz3','dz4','dz5','dz6']]
+all_dev=dataset[['dz1','dz2','dz3','dz4','dz5','dz6']].values.tolist()
 
 #To generate empty datasets
 #level_0=dataset['class_1']*0
@@ -137,13 +157,13 @@ all_dev=dataset[['dz1','dz2','dz3','dz4','dz5','dz6']]
 
 severity_ary=dataset['class_1']*0
 
+#col_dz=all_dev.columns
 
-for i in range(0,dataset.shape[0]-1):
+for i in range(0,dataset.shape[0]):
        #single_dev=all_dev[i:i+1].tolist()
        
-       if 
-       single_dev=[all_dev[i:i+1].values[0][0],all_dev[i:i+1].values[0][1],all_dev[i:i+1].values[0][2],all_dev[i:i+1].values[0][3],all_dev[i:i+1].values[0][4],all_dev[i:i+1].values[0][5]]
-       
+       #single_dev=[all_dev[i:i+1].values[0][0],all_dev[i:i+1].values[0][1],all_dev[i:i+1].values[0][2],all_dev[i:i+1].values[0][3],all_dev[i:i+1].values[0][4],all_dev[i:i+1].values[0][5]]
+       single_dev=all_dev[i]
        clas=class_total[i]
        severity_ary[i]= cal_severity(clas,single_dev)
        
@@ -155,14 +175,10 @@ frame=[class_total,severity_ary]
 dataset_new_data=pd.concat(frame, axis=1)
 dataset_new_data.columns=['class_total','severity']
 dataset=pd.concat([dataset,dataset_new_data],axis=1)
+col=dataset.columns.values
 
-
-dataset.to_excel(r'D:\PS!\CO2_Anomaly_detection\CODE\Anomaly_detect\temp file\a.xlsx')
-        
 
 #############################################################################################################################################################################
-
-
 
 #X_complete=dataset.drop([ 'class_0', 'class_1', 'class_2','class_3', 'class_4','dif1', 'dif2', 'dif3', 'dif4', 'dif5', 'dif6'],axis=1)
 X_complete=dataset.drop([ 'class_0', 'class_1', 'class_2','class_3', 'class_4','severity'],axis=1)
@@ -172,9 +188,13 @@ y_complete=dataset[[ 'severity']]
 print("Unnormalized Data", "\n", X_complete[:5], "\n")
 print("Unnormalized Data", "\n", y_complete[:5], "\n")
 
+
+
+#############################################################################################
 # Feature scaling according to training set data 
 col=list(X_complete.columns.values)
-
+avg=0
+sd=0
 for i in col:#[:-1]:
     avg=X_complete[str(i)].mean()
     sd=X_complete[str(i)].std()
@@ -182,6 +202,24 @@ for i in col:#[:-1]:
     print(avg)
     print(sd)
     print(i)
+
+
+#############################################################################################
+
+
+
+col=list(X_complete.columns.values)    
+#Normalisation of all except class total
+j=0
+for i in col[:-1]:
+    print(i)    
+    X_complete[str(i)]=X_complete[str(i)].apply(lambda X:(X-avg_array[j])/(sd_array[j]))
+    j=j+1
+        
+        
+    
+#############################################################################################
+
   
 
     
@@ -204,27 +242,27 @@ X_train, X_test, y_train, y_test = train_test_split(X_complete, y_complete, test
 
 # Define Neural Network model layers
 model = Sequential()
-model.add(Dense(10, input_dim=23, activation='relu'))
+model.add(Dense(10, input_dim=17, activation='relu'))
 #model.add(Dense(10, input_dim=11, activation='softmax'))
-model.add(Dense(10, activation='relu'))
+model.add(Dense(15, activation='relu'))
 model.add(Dense(10, activation='relu'))
 model.add(Dense(3, activation='softmax'))
 # Compile model
-model.compile(Adam(lr=0.01),'categorical_crossentropy',metrics=['accuracy'])
+model.compile(Adam(lr=0.0001),'categorical_crossentropy',metrics=['accuracy'])
 
 
 
 
-if os.path.isfile('@new_model_severityl.h5'):
+if os.path.isfile('@diffusion_severity_detect2.h5'):
 
     # Model reconstruction from JSON file
-    json_file = open('new_model_severity.json', 'r')
+    json_file = open('diffusion_severity_detect2.json', 'r')
     loaded_model_json = json_file.read()
     json_file.close()
     model = model_from_json(loaded_model_json)
     
     # Load weights into the new model
-    model.load_weights('new_model_severity.h5')
+    model.load_weights('diffusion_severity_detect2.h5')
     print("Model weights loaded from saved model data.")
 
     model.compile(Adam(lr=0.0001),'categorical_crossentropy',metrics=['accuracy'])
@@ -237,11 +275,11 @@ else:
  
          # Save parameters to JSON file
     model_json = model.to_json()
-    with open("diffusion_severity_detect.json", "w") as json_file:
+    with open("diffusion_severity_detect2.json", "w") as json_file:
         json_file.write(model_json)
 
     # Save model weights to file
-    model.save_weights('diffusion_severity_detect.h5')
+    model.save_weights('diffusion_severity_detect2.h5')
 
 
 model.summary()
